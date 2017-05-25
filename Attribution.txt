@@ -1,0 +1,37 @@
+The following open source projects are referenced by Export Distribution:
+
+Spring Boot (Apache 2.0) - https://projects.spring.io/spring-boot/
+https://github.com/spring-projects/spring-boot/blob/master/LICENSE.txt
+
+Spring Data MongoDB (Apache 2.0) - http://projects.spring.io/spring-data-mongodb/
+No License page available
+
+Spring Framework (Apache 2.0) - http://projects.spring.io/spring-framework/
+https://github.com/spring-projects/spring-framework
+
+Spring Cloud (Apache 2.0) - http://projects.spring.io/spring-cloud/
+https://github.com/spring-cloud/spring-cloud-release/blob/master/LICENSE.txt
+
+Log4J (Apache 2.0) - https://logging.apache.org/log4j/2.x/
+https://logging.apache.org/log4j/2.0/license.html
+
+AspectJ (EPL 1.0) - https://eclipse.org/aspectj/
+https://eclipse.org/aspectj/doc/released/faq.php
+
+Spring Integration (Apache 2.0) - https://projects.spring.io/spring-integration/
+No License page available
+
+GSON (Apache 2.0) - https://github.com/google/gson
+https://github.com/google/gson/blob/master/LICENSE
+
+JeroMQ (Mozilla Public License 2.0) - https://github.com/zeromq/jeromq
+https://github.com/zeromq/jeromq/blob/master/LICENSE
+
+Azure IoT Hub Java Client (MIT) - https://github.com/Azure/azure-iot-sdks
+https://github.com/Azure/azure-iot-sdks/blob/master/LICENSE
+
+Paho (EPL) - http://www.eclipse.org/paho/
+http://www.eclipse.org/legal/termsofuse.php
+
+Junit (EPL 1.0) - http://junit.org/junit4/
+http://junit.org/junit4/license.html
