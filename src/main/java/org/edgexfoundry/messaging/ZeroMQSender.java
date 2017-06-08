@@ -51,7 +51,7 @@ public class ZeroMQSender {
 	 *            - event String in whatever format, compressed, encrypted, etc.
 	 *            per client need
 	 */
-	public void sendEventMessage(String payload) {
+	public synchronized void sendEventMessage(String payload) {
 		try {
 			if (publisher == null)
 				getPublisher();
@@ -66,7 +66,7 @@ public class ZeroMQSender {
 	}
 
 	// allow only one thread at a time to get the publisher set up
-	private synchronized void getPublisher() {
+	private void getPublisher() {
 		try {
 			if (publisher == null) {
 				publisher = context.socket(ZMQ.PUB);
