@@ -59,9 +59,8 @@ public class IotCoreMQTTSender implements MqttCallback {
   private static final short mqttBridgePort = 8883;
   private static final short jwtExpiration = 60; // + 10 minutes skew
 
-
   public IotCoreMQTTSender(Addressable addressable, String privateKeyFile, String algorithm,
-      int qos, int keepAlive) {
+      int qos, int keepAlive) throws Exception {
     this.clientId = addressable.getPublisher();
     this.projectId = clientId.substring(9, clientId.indexOf("/locations/"));
     this.deviceId = clientId.substring(clientId.indexOf("/devices/") + 9);
@@ -119,8 +118,10 @@ public class IotCoreMQTTSender implements MqttCallback {
   private String createJwt(String projectId, String privateKeyFile, String algorithm)
       throws Exception {
     DateTime now = new DateTime();
-    JwtBuilder jwtBuilder = Jwts.builder().setIssuedAt(now.toDate())
-        .setExpiration(now.plusMinutes(jwtExpiration).toDate()).setAudience(projectId);
+    JwtBuilder jwtBuilder = Jwts.builder()
+        .setIssuedAt(now.toDate())
+        .setExpiration(now.plusMinutes(jwtExpiration).toDate())
+        .setAudience(projectId);
 
     if (algorithm.equals("RS256")) {
       PrivateKey privateKey = loadKeyFile(privateKeyFile, "RSA");
@@ -129,12 +130,12 @@ public class IotCoreMQTTSender implements MqttCallback {
       PrivateKey privateKey = loadKeyFile(privateKeyFile, "EC");
       return jwtBuilder.signWith(SignatureAlgorithm.ES256, privateKey).compact();
     } else {
-      throw new IllegalArgumentException(
-          "Invalid algorithm " + algorithm + ". Should be one of 'RS256' or 'ES256'.");
+      throw new IllegalArgumentException("Invalid algorithm " + algorithm
+          + ". Should be one of 'RS256' or 'ES256'.");
     }
   }
 
-  private void connectClient() {
+  private void connectClient() throws Exception {
     try {
       String mqttServerAddress = String.format("ssl://%s:%s", mqttBridgeHostname, mqttBridgePort);
 
@@ -155,8 +156,8 @@ public class IotCoreMQTTSender implements MqttCallback {
       logger.debug("Connected");
 
     } catch (Exception e) {
-      logger.error("Failed to connect to MQTT client ( " + mqttBridgeHostname + ":" + mqttBridgePort
-          + "/" + clientId + ") for outbound messages");
+      logger.error("Failed to connect to MQTT client ( " + mqttBridgeHostname + ":"
+          + mqttBridgePort + "/" + clientId + ") for outbound messages");
       e.printStackTrace();
     }
   }
@@ -183,13 +184,17 @@ public class IotCoreMQTTSender implements MqttCallback {
       logger.error("Unable to close the client.");
       e.printStackTrace();
     }
-    connectClient();
+    try {
+      connectClient();
+    } catch (Exception e) {
+      logger.error("Unable to reconnect");
+    }
   }
 
   @Override
   public void messageArrived(String topic, MqttMessage message) throws Exception {
-    logger.debug("Message received on Outgoing Sender for topic: " + topic + ".  Payload:  "
-        + message.getPayload().toString());
+    logger.debug("Message received on Outgoing Sender for topic: " + topic
+        + ".  Payload:  " + message.getPayload().toString());
   }
 
   @Override

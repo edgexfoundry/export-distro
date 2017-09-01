@@ -51,18 +51,18 @@ public class IotCoreMQTTOutboundServiceActivator {
         // String clientId = addressable.getPublisher();
 
         if (sender == null) {
-          sender = new IotCoreMQTTSender(payload.getRegistration().getAddressable(), privateKeyFile,
-              algorithm, 0, 600);
+          sender = new IotCoreMQTTSender(addressable, privateKeyFile, algorithm, 0, 600);
         }
         boolean ok = sender.sendMessage(payload.getEventString().getBytes());
-        if (!ok)
+        if (!ok) {
           throw new Exception("error while sending message");
+        }
         logger.info("message sent to IoT Core MQTT broker:  "
             + payload.getRegistration().getAddressable() + " : " + payload.getEventId());
         return payload.getEventId();
       } else {
-        logger.error(
-            "No MQTT address information provided with registration.  Event message not sent for client.");
+        logger.error("No MQTT address information provided with registration."
+            + " Event message not sent for client.");
       }
     } catch (Exception e) {
       logger.error("Problem when sending message via MQTT: " + e.getMessage());

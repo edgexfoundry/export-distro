@@ -17,11 +17,13 @@
  *******************************************************************************/
 package org.edgexfoundry.serviceactivator;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.edgexfoundry.domain.export.ExportRegistration;
 import org.edgexfoundry.domain.export.ExportString;
+import org.edgexfoundry.domain.meta.Addressable;
+import org.edgexfoundry.domain.meta.Protocol;
 import org.edgexfoundry.serviceactivator.IotCoreMQTTOutboundServiceActivator;
 import org.edgexfoundry.test.category.RequiresNone;
 import org.edgexfoundry.test.data.ExportStringData;
@@ -39,23 +41,42 @@ public class IotCoreMQTTOutboundServiceActivatorTest {
   private Message<ExportString> message;
   private static final String TEST_STRING = "foobar";
   private static final String TEST_ID = "1234";
+  // standard clientid format for IoT Core
+  private static final String TEST_PUBLISHER = "projects/project1/locations/us-central1/registries/registry1/devices/device1";
+  // standard topic format for IoT Core
+  private static final String TEST_TOPIC = "/devices/device1/events";
+  private static final String TEST_USER = "unused";
+  private static final String TEST_PASSWORD = "";
+  private static final String TEST_ADDRESS = "unused.com";
+  private static final int TEST_PORT = 8883;
 
   @Before
-  public void setup() throws IllegalAccessException {
+  public void setup() {
     activator = new IotCoreMQTTOutboundServiceActivator();
     string = ExportStringData.newTestInstance();
     string.setEventString(TEST_STRING);
     string.setEventId(TEST_ID);
+    
+    Addressable addressable = new Addressable(TEST_STRING, Protocol.OTHER, TEST_ADDRESS, TEST_PORT,
+        TEST_PUBLISHER, TEST_USER, TEST_PASSWORD, TEST_TOPIC);
+    ExportRegistration er = new ExportRegistration();
+    er.setAddressable(addressable);
+    string.setRegistration(er, TEST_ID);
+    
     message = MessageBuilder.withPayload(string).build();
-    FieldUtils.writeField(activator, "privateKeyFile", "rsa_private_pkcs8", true);
-    FieldUtils.writeField(activator, "algorithm", "RS256", true);
+    try {
+      FieldUtils.writeField(activator, "privateKeyFile", "rsa_private_pkcs8", true);
+      FieldUtils.writeField(activator, "algorithm", "RS256", true);
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    }
   }
 
-//  @Test
-//  public void testMqttOutbound() {
-//    assertEquals("Returned event id does not match expected", TEST_ID,
-//        activator.mqttOutbound(message));
-//  }
+  @Test
+  public void testMqttOutbound() {
+    assertNull("Not returning null for bogus connection parameters",
+        activator.mqttOutbound(message));
+  }
 
   @Test
   public void testMqttOutboundNoAddressable() {
