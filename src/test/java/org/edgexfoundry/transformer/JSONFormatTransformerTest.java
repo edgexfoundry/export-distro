@@ -54,6 +54,7 @@ public class JSONFormatTransformerTest {
 		assertEquals("JSON tranformed string not the same as the expected string", EXPECTED_JSON,
 				transformer.transformJSON(message).getEventString());
 	}
+
 	@Test
 	public void testTransformAzureJSON() {
 		Reading r = new Reading();
@@ -63,7 +64,13 @@ public class JSONFormatTransformerTest {
 		assertEquals("Azure JSON tranformed string not the same as the expected string", EXPECTED_AZURE_JSON,
 				transformer.transformAzureJSON(message).getEventString());
 	}
-	
+
+	@Test
+	public void testTransformIotCoreJSON() {
+		assertEquals("JSON tranformed string not the same as the expected string", EXPECTED_JSON,
+				transformer.transformIotCoreJSON(message).getEventString());
+	}
+
 	@Test(expected = Exception.class)
 	public void testTransformException() {
 		message.getPayload().setEvent(null);

@@ -44,6 +44,7 @@
 		<nexusproxy>https://nexus.edgexfoundry.org</nexusproxy>
 		<repobasepath>content/repositories</repobasepath>
 		<checkstyle.plugin.version>2.17</checkstyle.plugin.version>
+		<iotcore-jsonwebtoken.version>0.7.0</iotcore-jsonwebtoken.version>
 	</properties>
 
 	<parent>
@@ -183,6 +184,11 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>${iotcore-jsonwebtoken.version}</version>
 		</dependency>
 	</dependencies>
 

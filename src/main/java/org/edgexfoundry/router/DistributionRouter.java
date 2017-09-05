@@ -44,6 +44,7 @@ public class DistributionRouter {
 	public static final String OUT_MQTT = "outbound-mqtt";
 	public static final String OUT_ZMQ = "outbound-zmq";
 	public static final String OUT_AZURE = "outbound-azure";
+	public static final String OUT_IOTCORE = "outbound-iotcore";
 
 	@Router(inputChannel = "outbound-encrypted-eventstring", resolutionRequired = "true")
 	public String route(ExportString message) throws Exception {
@@ -56,6 +57,8 @@ public class DistributionRouter {
 			return OUT_MQTT;
 		case ZMQ_TOPIC:
 			return OUT_ZMQ;
+		case IOTCORE_MQTT:
+			return OUT_IOTCORE;
 		case AZURE_MQTT:
 			return OUT_AZURE;
 		default:

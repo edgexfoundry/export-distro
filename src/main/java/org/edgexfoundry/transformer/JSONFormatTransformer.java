@@ -63,6 +63,23 @@ public class JSONFormatTransformer {
 		}
 	}
 
+	@Transformer(inputChannel = "iotcore-json-inbound-eventmessages", outputChannel = "outbound-eventstring")
+	public ExportString transformIotCoreJSON(Message<?> msg) {
+		try {
+			ExportMessage exportMsg = (ExportMessage) msg.getPayload();
+			String eventId = exportMsg.getEvent().getId();
+			logger.debug("message arrived at IoT Core JSON format transformer: " + eventId);
+			ExportString export = new ExportString();
+			export.setRegistration(exportMsg.getRegistration(), eventId);
+			export.setEventString(eventToJSON(exportMsg.getEvent()));
+			logger.debug("message leaving IoT Core JSON format transformer " + eventId);
+			return export;
+		} catch (Exception e) {
+			logger.error("Problem with IoT Core JSON format transformation: " + e.getMessage());
+			throw e;
+		}
+	}
+
 	@Transformer(inputChannel = "azure-json-inbound-eventmessages", outputChannel = "outbound-eventstring")
 	public ExportString transformAzureJSON(Message<?> msg) {
 		try {

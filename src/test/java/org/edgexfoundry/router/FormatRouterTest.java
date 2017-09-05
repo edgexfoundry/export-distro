@@ -66,6 +66,12 @@ public class FormatRouterTest {
 		assertEquals("Route for AZURE format not routing properly", FormatRouter.OUT_AZURE, router.route(export));
 	}
 
+	@Test
+	public void testRouteIotCore() throws Exception {
+		export.getRegistration().setFormat(ExportFormat.IOTCORE_JSON);
+		assertEquals("Route for IOT CORE format not routing properly", FormatRouter.OUT_IOTCORE, router.route(export));
+	}
+
 	@Test(expected = Exception.class)
 	public void testRouteCSV() throws Exception {
 		export.getRegistration().setFormat(ExportFormat.CSV);
