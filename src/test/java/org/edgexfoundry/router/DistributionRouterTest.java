@@ -66,6 +66,12 @@ public class DistributionRouterTest {
 		assertEquals("Route of data for AZURE MQTT TOPIC incorrectly routed", DistributionRouter.OUT_AZURE, router.route(string));
 	}
 
+	@Test
+	public void testRouteIotCore() throws Exception {
+		string.getRegistration().setDestination(ExportDestination.IOTCORE_MQTT);
+		assertEquals("Route of data for IOT CORE MQTT TOPIC incorrectly routed", DistributionRouter.OUT_IOTCORE, router.route(string));
+	}
+
 	@Test(expected = Exception.class)
 	public void testRouteNoDestination() throws Exception {
 		string.getRegistration().setDestination(null);

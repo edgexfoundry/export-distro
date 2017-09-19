@@ -38,6 +38,7 @@ public class FormatRouter {
 	public static final String OUT_JSON = "json-inbound-eventmessages";
 	public static final String OUT_SERIALIZED = "serial-inbound-eventmessages";
 	public static final String OUT_AZURE = "azure-json-inbound-eventmessages";
+	public static final String OUT_IOTCORE = "iotcore-json-inbound-eventmessages";
 
 	// private static final Logger logger =
 	// Logger.getLogger(FormatRouter.class);
@@ -57,6 +58,8 @@ public class FormatRouter {
 				return OUT_XML;
 			case SERIALIZED:
 				return OUT_SERIALIZED;
+			case IOTCORE_JSON:
+				return OUT_IOTCORE;
 			case AZURE_JSON:
 				return OUT_AZURE;
 			case CSV: // TODO - someday handle CSV format
