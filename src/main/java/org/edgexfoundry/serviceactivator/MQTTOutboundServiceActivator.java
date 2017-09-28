@@ -48,31 +48,28 @@ public class MQTTOutboundServiceActivator {
 			ExportString exportString = (ExportString) msg.getPayload();
 			logger.debug("message arrived at MQTT outbound sender: " + exportString.getEventId());
 			Addressable addressable = exportString.getRegistration().getAddressable();
-			if (addressable != null) {				
+
+			if (addressable != null) {
 				// if path contains "/" pre- or append path to topic, otherwise
 				// if path contains "\[any_string]" pre- or append dynamically device id to topic
 				// TODO - read "\[key]" from addressable and pre- or append its value to topic
 				String path = addressable.getPath();
 				if (path != null && !path.equals("")) {
 					String topic = addressable.getTopic();
-					if (path.contains("/")) {
-						if (path.charAt(0) == '/') {
-							addressable.setTopic(topic + path);
-						} else if (path.charAt(path.length() - 1) == '/') {
-							addressable.setTopic(path + topic);
-						}
-					} else if (path.contains("\\")) {
-						if (path.charAt(0) == '\\') {
-							addressable.setTopic(topic + "/" + exportString.getDeviceId());
-						} else if (path.charAt(path.length() - 1) == '\\') {
-							addressable.setTopic(exportString.getDeviceId() + "/" + topic);
-						}
-					}					
+					if (path.charAt(0) == '/') {
+						addressable.setTopic(topic + path);
+					} else if (path.charAt(path.length() - 1) == '/') {
+						addressable.setTopic(path + topic);
+					} else if (path.charAt(0) == '\\') {
+						addressable.setTopic(topic + "/" + exportString.getDeviceId());
+					} else if (path.charAt(path.length() - 1) == '\\') {
+						addressable.setTopic(exportString.getDeviceId() + "/" + topic);
+					}
 				}
-				
+
 				// TODO - someday cache and reuse clients
-				MQTTSender sender = new MQTTSender(addressable);				
-				
+				MQTTSender sender = new MQTTSender(addressable);
+
 				sender.sendMessage(exportString.getEventString().getBytes());
 				sender.closeClient();
 				logger.info("message sent to MQTT broker:  " + exportString.getRegistration().getAddressable() + " : "
