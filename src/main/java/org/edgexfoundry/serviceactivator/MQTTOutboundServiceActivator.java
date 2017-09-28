@@ -55,14 +55,11 @@ public class MQTTOutboundServiceActivator {
 				String path = addressable.getPath();
 				if (path != null && !path.equals("")) {
 					String topic = addressable.getTopic();
-					if (path.contains("/")) {
 						if (path.charAt(0) == '/') {
 							addressable.setTopic(topic + path);
 						} else if (path.charAt(path.length() - 1) == '/') {
 							addressable.setTopic(path + topic);
-						}
-					} else if (path.contains("\\")) {
-						if (path.charAt(0) == '\\') {
+						} else if (path.charAt(0) == '\\') {
 							addressable.setTopic(topic + "/" + exportString.getDeviceId());
 						} else if (path.charAt(path.length() - 1) == '\\') {
 							addressable.setTopic(exportString.getDeviceId() + "/" + topic);
