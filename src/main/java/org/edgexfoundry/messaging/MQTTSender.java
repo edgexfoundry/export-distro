@@ -19,6 +19,8 @@
  *******************************************************************************/
 package org.edgexfoundry.messaging;
 
+import javax.net.ssl.SSLContext;
+
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -44,7 +46,8 @@ public class MQTTSender implements MqttCallback {
 	private String topic;
 	private int qos;
 	private int keepAlive;
-
+	private boolean secureConnection;
+	
 	public MQTTSender(String brokerUrl, int brokerPort, String clientId, String user, String password, String topic,
 			int qos, int keepAlive) {
 		this.brokerUrl = brokerUrl;
@@ -55,6 +58,7 @@ public class MQTTSender implements MqttCallback {
 		this.topic = topic;
 		this.qos = qos;
 		this.keepAlive = keepAlive;
+		this.secureConnection = brokerUrl.startsWith("ssl:");
 		this.connectClient();
 	}
 
@@ -97,6 +101,16 @@ public class MQTTSender implements MqttCallback {
 			connOpts.setPassword(password.toCharArray());
 			connOpts.setCleanSession(true);
 			connOpts.setKeepAliveInterval(keepAlive);
+			if (secureConnection) {
+				try {
+					EdgeXSecurityManager secMgr = new EdgeXSecurityManager();
+					SSLContext ctxt = SSLContext.getInstance("TLS");
+					ctxt.init(secMgr.getKeyManagers(), secMgr.getTrustManagers(), new java.security.SecureRandom());
+					connOpts.setSocketFactory(ctxt.getSocketFactory());
+				} catch (Exception e) {
+					logger.debug("Failed to initialize secure connection to broker.  Will attempt unsecure connection.", e);
+				}
+			}
 			logger.debug("Connecting to broker:  " + brokerUrl);
 			client.connect(connOpts);
 			logger.debug("Connected");
@@ -143,5 +157,4 @@ public class MQTTSender implements MqttCallback {
 		logger.debug("Message delivered successfully by Outgoing Sender to topic:  " + topic + ".  Token:  "
 				+ token.toString());
 	}
-
 }
