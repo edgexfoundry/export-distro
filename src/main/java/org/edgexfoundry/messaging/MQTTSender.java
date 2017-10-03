@@ -108,7 +108,7 @@ public class MQTTSender implements MqttCallback {
 					ctxt.init(secMgr.getKeyManagers(), secMgr.getTrustManagers(), new java.security.SecureRandom());
 					connOpts.setSocketFactory(ctxt.getSocketFactory());
 				} catch (Exception e) {
-					logger.debug("Failed to initialize secure connection to broker.  Will attempt unsecure connection.", e);
+					logger.error("Failed to initialize secure connection to broker.  Will attempt unsecure connection.", e);
 				}
 			}
 			logger.debug("Connecting to broker:  " + brokerUrl);
