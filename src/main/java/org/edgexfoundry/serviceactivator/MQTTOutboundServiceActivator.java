@@ -74,7 +74,7 @@ public class MQTTOutboundServiceActivator {
 		// if path contains "\[any_string]" pre- or append dynamically device id to topic
 		// TODO - read "\[key]" from addressable and pre- or append its value to topic
 		String path = addressable.getPath();
-		if (path != null && !path.equals("")) {
+		if (path != null && path.length() > 1) {
 			String topic = addressable.getTopic();
 			if (path.charAt(0) == '/') {
 				addressable.setTopic(topic + path);
