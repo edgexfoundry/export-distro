@@ -26,6 +26,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttSecurityException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.edgexfoundry.domain.meta.Addressable;
 
@@ -108,7 +109,8 @@ public class MQTTSender implements MqttCallback {
 					ctxt.init(secMgr.getKeyManagers(), secMgr.getTrustManagers(), new java.security.SecureRandom());
 					connOpts.setSocketFactory(ctxt.getSocketFactory());
 				} catch (Exception e) {
-					logger.error("Failed to initialize secure connection to broker.  Will attempt unsecure connection.", e);
+					logger.error("Failed to initialize secure connection to broker.", e);
+					throw new MqttSecurityException(e);
 				}
 			}
 			logger.debug("Connecting to broker:  " + brokerUrl);
