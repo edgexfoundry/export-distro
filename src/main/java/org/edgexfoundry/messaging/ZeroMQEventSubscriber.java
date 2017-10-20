@@ -19,6 +19,7 @@
  *******************************************************************************/
 package org.edgexfoundry.messaging;
 
+import com.google.gson.Gson;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -136,10 +137,17 @@ public class ZeroMQEventSubscriber implements EventSubscriber {
 	}
 
 	private static Event toEvent(byte[] eventBytes) throws IOException, ClassNotFoundException {
-		ByteArrayInputStream bis = new ByteArrayInputStream(eventBytes);
-		ObjectInput in = new ObjectInputStream(bis);
-		Event event = (Event) in.readObject();
-		return event;
+		try { 
+			Gson gson = new Gson();
+			String json = new String(eventBytes);
+			return gson.fromJson(json, Event.class);
+		} catch (Exception e) { 
+			// Try to degrade to deprecated serialization functionality gracefully
+			ByteArrayInputStream bis = new ByteArrayInputStream(eventBytes);
+			ObjectInput in = new ObjectInputStream(bis);
+			Event event = (Event) in.readObject();
+			return event;
+		}
 	}
 
 }
