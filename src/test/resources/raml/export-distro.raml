@@ -1,0 +1,13 @@
+#%RAML 0.8
+title: export-distro
+version: "1.0.0"
+baseUri: "http://localhost:48070/api/v1"
+/ping: 
+    displayName: Ping Resource
+    description: "example - http://localhost:48070/api/v1/ping"
+    get: 
+        description: Test service providing an indication that the service is available.
+        displayName: ping to test if service is up
+        responses: 
+            "200": 
+                description: pong as a string
