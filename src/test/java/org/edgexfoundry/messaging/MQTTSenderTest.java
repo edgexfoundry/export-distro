@@ -22,6 +22,7 @@ package org.edgexfoundry.messaging;
 import static org.edgexfoundry.test.data.RegistrationData.TEST_ADDRESS;
 import static org.edgexfoundry.test.data.RegistrationData.TEST_PASSWORD;
 import static org.edgexfoundry.test.data.RegistrationData.TEST_PORT;
+import static org.edgexfoundry.test.data.RegistrationData.TEST_PROTOCOL;
 import static org.edgexfoundry.test.data.RegistrationData.TEST_PUBLISHER;
 import static org.edgexfoundry.test.data.RegistrationData.TEST_TOPIC;
 import static org.edgexfoundry.test.data.RegistrationData.TEST_USER;
@@ -43,7 +44,7 @@ public class MQTTSenderTest {
 
 	@Before
 	public void setup() {
-		sender = new MQTTSender(TEST_ADDRESS, TEST_PORT, TEST_PUBLISHER, TEST_USER, TEST_PASSWORD, TEST_TOPIC, 0, 3600);
+		sender = new MQTTSender(TEST_PROTOCOL.toString().toLowerCase() + "://" + TEST_ADDRESS, TEST_PORT, TEST_PUBLISHER, TEST_USER, TEST_PASSWORD, TEST_TOPIC, 0, 3600);
 	}
 
 	@After
@@ -66,7 +67,7 @@ public class MQTTSenderTest {
 //	@Test
 //	public void testConnectFail() throws MqttException {
 //		// create a client already using the persistence path
-//		MqttClient client = new MqttClient(TEST_ADDRESS + ":" + TEST_PORT, TEST_PUBLISHER);
+//		MqttClient client = new MqttClient(TEST_PROTOCOL.toString().toLowerCase() + "://" + TEST_ADDRESS + ":" + TEST_PORT, TEST_PUBLISHER);
 //		MqttConnectOptions connOpts = new MqttConnectOptions();
 //		connOpts.setUserName(TEST_USER);
 //		connOpts.setPassword(TEST_PASSWORD.toCharArray());
