@@ -64,8 +64,12 @@ public class MQTTSender implements MqttCallback {
 	}
 
 	public MQTTSender(Addressable addressable) {
-		this(addressable.getAddress(), addressable.getPort(), addressable.getPublisher(), addressable.getUser(),
+		this(buildBrokerUrl(addressable), addressable.getPort(), addressable.getPublisher(), addressable.getUser(),
 				addressable.getPassword(), addressable.getTopic(), 0, 3600);
+	}
+
+	private static String buildBrokerUrl(Addressable addressable) {
+		return addressable.getProtocol().toString().toLowerCase() + "://" + addressable.getAddress();
 	}
 
 	public boolean sendMessage(byte[] messagePayload) {
