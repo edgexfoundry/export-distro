@@ -53,7 +53,7 @@ public class CompressionTransformerTest {
 
 	@Test
 	public void testTransformCompressionGZIP() throws Exception {
-		string.getRegistration().setCompression(ExportCompression.GZIP);
+		string.getRegistration().setCompression(ExportCompression.valueOf("GZIP"));
 		String compressedString = getGZIPEncriptionString(TEST_STRING);
 		assertEquals("Transformed string of message does matched expected GZIP compressed value", compressedString,
 				transformer.transform(message).getEventString());
@@ -61,7 +61,7 @@ public class CompressionTransformerTest {
 
 	@Test
 	public void testTransformCompressionZIP() throws Exception {
-		string.getRegistration().setCompression(ExportCompression.ZIP);
+		string.getRegistration().setCompression(ExportCompression.valueOf("ZIP"));
 		String compressedString = getZIPEncriptionString(TEST_STRING);
 		assertEquals("Transformed string of message does matched expected ZIP compressed value", compressedString,
 				transformer.transform(message).getEventString());
@@ -70,7 +70,7 @@ public class CompressionTransformerTest {
 	@Test
 	public void testTransformNoCompression() throws Exception {
 		string.getRegistration().setCompression(null);
-		assertEquals("Transformed string of message does matched expected ZIP encrypted value", TEST_STRING,
+		assertEquals("Transformed string of message does matched expected unencrypted value", TEST_STRING,
 				transformer.transform(message).getEventString());
 	}
 
