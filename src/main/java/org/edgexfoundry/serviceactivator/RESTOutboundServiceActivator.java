@@ -27,6 +27,8 @@ import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.http.outbound.HttpRequestExecutingMessageHandler;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
+import org.springframework.util.MimeTypeUtils;
 
 /**
  * Send export data to REST channel of client's desire.
@@ -53,7 +55,7 @@ public class RESTOutboundServiceActivator {
 			HttpRequestExecutingMessageHandler handler = new HttpRequestExecutingMessageHandler(uri);
 			handler.setHttpMethod(HttpMethod.POST);
 			handler.setExpectReply(false);
-			Message<String> message = MessageBuilder.withPayload(exportString.getEventString()).build();
+			Message<String> message = MessageBuilder.withPayload(exportString.getEventString()).setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON_VALUE).build();
 			handler.handleMessage(message);
 			logger.info("message sent to REST address:  " + uri + " : " + exportString.getEventId());
 			return exportString.getEventId();
